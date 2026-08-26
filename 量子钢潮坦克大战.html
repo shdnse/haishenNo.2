@@ -505,7 +505,20 @@
     }
 
     @media (orientation: portrait) and (pointer: coarse) {
-      .rotate-notice { display: grid; }
+      .rotate-notice { display: none !important; }
+      #game-shell {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 100vh;
+        width: 100dvh;
+        height: 100vw;
+        height: 100dvw;
+        min-width: 0;
+        min-height: 0;
+        transform: translate(-50%, -50%) rotate(90deg);
+        transform-origin: center;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -865,6 +878,18 @@
         level: 1, xp: 0, xpNeed: 42, pendingLevels: 0,
         supplyTimer: 28, eventTimer: 0, spawnSerial: 0
       };
+    }
+
+    async function requestMobileLandscape() {
+      if (!matchMedia("(pointer: coarse)").matches) return;
+      try {
+        if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+          await document.documentElement.requestFullscreen({ navigationUI: "hide" });
+        }
+      } catch (_) {}
+      try {
+        if (screen.orientation && screen.orientation.lock) await screen.orientation.lock("landscape");
+      } catch (_) {}
     }
 
     function startGame() {
@@ -1326,7 +1351,7 @@
     $("touch-skill").addEventListener("pointerdown",e=>{e.preventDefault();useSkill();});
     $("touch-dash").addEventListener("pointerdown",e=>{e.preventDefault();tryDash(input.moveX,input.moveY);});
 
-    $("start-btn").addEventListener("click",startGame);
+    $("start-btn").addEventListener("click",()=>{requestMobileLandscape();startGame();});
     $("resume-btn").addEventListener("click",resumeGame);
     $("restart-pause-btn").addEventListener("click",startGame);
     $("menu-pause-btn").addEventListener("click",returnToMenu);
