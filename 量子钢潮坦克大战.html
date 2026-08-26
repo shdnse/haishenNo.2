@@ -363,61 +363,61 @@
 
     .hud-top {
       position: absolute;
-      top: 52px;
-      left: 16px;
-      right: 16px;
+      top: 46px;
+      left: 12px;
+      right: 12px;
       display: grid;
-      grid-template-columns: minmax(240px, 360px) 1fr minmax(200px, 310px);
-      gap: 15px;
+      grid-template-columns: minmax(200px, 280px) 1fr minmax(150px, 220px);
+      gap: 10px;
       align-items: start;
     }
 
     .hud-panel {
-      padding: 10px 12px;
+      padding: 7px 9px;
       border: 1px solid rgba(82, 190, 225, .18);
-      border-radius: 8px;
-      background: linear-gradient(100deg, rgba(5, 14, 27, .91), rgba(8, 22, 39, .72));
-      box-shadow: inset 0 0 22px rgba(47, 174, 229, .04), 0 8px 18px rgba(0,0,0,.18);
-      backdrop-filter: blur(5px);
+      border-radius: 7px;
+      background: linear-gradient(100deg, rgba(5, 14, 27, .72), rgba(8, 22, 39, .42));
+      box-shadow: inset 0 0 18px rgba(47, 174, 229, .035), 0 5px 12px rgba(0,0,0,.12);
+      backdrop-filter: blur(2px);
     }
 
-    .hud-label-line { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; font-size: 10px; color: var(--muted); letter-spacing: .08em; }
+    .hud-label-line { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; font-size: 9px; color: var(--muted); letter-spacing: .08em; }
     .hud-label-line strong { color: var(--text); font-size: 11px; }
 
-    .meter { position: relative; height: 9px; margin: 4px 0; background: rgba(48, 76, 94, .25); overflow: hidden; border-radius: 2px; }
+    .meter { position: relative; height: 6px; margin: 3px 0; background: rgba(48, 76, 94, .22); overflow: hidden; border-radius: 2px; }
     .meter > i { display: block; height: 100%; width: 100%; transition: width .18s ease; }
     .hp-fill { background: linear-gradient(90deg, #ff315a, #ff6c65); box-shadow: 0 0 8px #ff3e60; }
     .shield-fill { background: linear-gradient(90deg, #1879ff, #4ce7ff); box-shadow: 0 0 8px #39caff; }
     .xp-fill { background: linear-gradient(90deg, #6d4bff, #bd6cff); box-shadow: 0 0 8px #9d62ff; }
     .core-fill { background: linear-gradient(90deg, #13a8d4, #58f4ff); box-shadow: 0 0 8px #38dff5; }
 
-    .wave-panel { justify-self: center; min-width: 180px; text-align: center; }
-    .wave-title { color: var(--cyan); font-size: 10px; letter-spacing: .2em; }
-    .wave-value { font-size: clamp(22px, 3vw, 38px); font-weight: 900; line-height: 1; margin: 4px 0; }
+    .wave-panel { justify-self: center; min-width: 160px; text-align: center; }
+    .wave-title { color: var(--cyan); font-size: 9px; letter-spacing: .16em; }
+    .wave-value { font-size: clamp(20px, 2.4vw, 30px); font-weight: 900; line-height: 1; margin: 3px 0; }
     .wave-sub { color: var(--muted); font-size: 9px; }
 
     .score-panel { text-align: right; }
-    .score-number { color: var(--gold); font-size: clamp(18px, 2.2vw, 28px); font-weight: 900; }
+    .score-number { color: var(--gold); font-size: clamp(17px, 2vw, 24px); font-weight: 900; }
 
     .hud-bottom {
       position: absolute;
-      left: 16px;
-      right: 16px;
-      bottom: 14px;
+      left: 12px;
+      right: 12px;
+      bottom: 10px;
       display: flex;
       align-items: end;
       justify-content: space-between;
       gap: 12px;
     }
 
-    .core-panel { width: min(330px, 32vw); }
+    .core-panel { width: min(270px, 27vw); }
     .core-note { margin-top: 5px; color: #6bdceb; font-size: 8px; letter-spacing: .08em; }
     .abilities { display: flex; gap: 8px; align-items: end; }
 
     .ability {
       position: relative;
-      width: 58px;
-      height: 58px;
+      width: 50px;
+      height: 50px;
       display: grid;
       place-items: center;
       border: 1px solid rgba(91, 216, 255, .28);
@@ -426,7 +426,7 @@
       overflow: hidden;
     }
 
-    .ability .icon { font-size: 22px; filter: drop-shadow(0 0 8px currentColor); }
+    .ability .icon { font-size: 19px; filter: drop-shadow(0 0 8px currentColor); }
     .ability .key { position: absolute; top: 3px; left: 5px; font-size: 8px; color: var(--muted); }
     .ability .cooldown { position: absolute; inset: auto 0 0; height: 0%; background: rgba(2, 5, 10, .78); transition: height .08s linear; }
     .ability .cd-text { position: absolute; font-size: 12px; font-weight: 800; }
@@ -638,6 +638,77 @@
     html.mobile-sim .hud-bottom { left:8px; right:auto; bottom:auto; top:118px; }
     html.mobile-sim .core-panel { width:205px; }
     html.mobile-sim .core-note, html.mobile-sim .abilities { display:none; }
+
+    /* 战斗视野优化：手机横屏 HUD 固定在边缘，中央战场保持通透。 */
+    @media (pointer: coarse), (any-pointer: coarse) {
+      .hud-top {
+        top:max(34px, env(safe-area-inset-top));
+        left:0;
+        right:0;
+        display:block;
+      }
+      .hud-top > .hud-panel { position:absolute; top:0; margin:0; }
+      .hud-top > .hud-panel:first-child { left:max(6px, env(safe-area-inset-left)); width:154px; }
+      .hud-top > .wave-panel { left:50%; width:126px; min-width:0; transform:translateX(-50%); }
+      .hud-top > .score-panel { right:max(56px, calc(env(safe-area-inset-right) + 56px)); width:96px; }
+      .hud-panel {
+        padding:4px 6px;
+        border-color:rgba(82,190,225,.2);
+        background:linear-gradient(100deg,rgba(5,14,27,.58),rgba(8,22,39,.25));
+        box-shadow:0 3px 9px rgba(0,0,0,.1);
+        backdrop-filter:blur(1.5px);
+      }
+      .hud-label-line { margin-bottom:2px; font-size:7px; }
+      .hud-label-line strong { font-size:8px; }
+      .meter { height:4px; margin:2px 0; }
+      .wave-title { max-width:100%; overflow:hidden; font-size:7px; letter-spacing:.1em; text-overflow:ellipsis; white-space:nowrap; }
+      .wave-value { margin:2px 0; font-size:17px; }
+      .wave-sub { max-width:100%; overflow:hidden; font-size:7px; text-overflow:ellipsis; white-space:nowrap; }
+      .score-panel .hud-label-line > span:first-child { display:none; }
+      .score-panel .hud-label-line { justify-content:flex-end; }
+      .score-number { font-size:14px; line-height:1.05; }
+      .hud-bottom {
+        top:max(82px, calc(env(safe-area-inset-top) + 82px));
+        left:auto;
+        right:max(58px, calc(env(safe-area-inset-right) + 58px));
+        bottom:auto;
+        display:block;
+      }
+      .core-panel { width:94px; padding:4px 6px; }
+      .core-panel .hud-label-line strong { font-size:0; }
+      .core-panel .hud-label-line strong::after { content:"量子核心"; font-size:7px; }
+      .core-note, .abilities { display:none; }
+      #boss-hud { top:79px; width:min(390px,48vw); padding:4px 7px 5px; background:linear-gradient(90deg,rgba(13,5,26,.64),rgba(31,8,44,.42),rgba(13,5,26,.64)); }
+      .boss-line { font-size:7px; }
+      .boss-meter { height:6px; margin-top:3px; }
+      .joy-zone, .touch-btn { opacity:.72; }
+      .joy-zone.active, .touch-btn:active, .touch-btn.active { opacity:1; }
+    }
+
+    html.mobile-sim .hud-top { top:34px; left:0; right:0; display:block; }
+    html.mobile-sim .hud-top > .hud-panel { position:absolute; top:0; margin:0; }
+    html.mobile-sim .hud-top > .hud-panel:first-child { left:6px; width:154px; }
+    html.mobile-sim .hud-top > .wave-panel { left:50%; width:126px; min-width:0; transform:translateX(-50%); }
+    html.mobile-sim .hud-top > .score-panel { right:56px; width:96px; }
+    html.mobile-sim .hud-panel { padding:4px 6px; background:linear-gradient(100deg,rgba(5,14,27,.58),rgba(8,22,39,.25)); backdrop-filter:blur(1.5px); }
+    html.mobile-sim .hud-label-line { margin-bottom:2px; font-size:7px; }
+    html.mobile-sim .hud-label-line strong { font-size:8px; }
+    html.mobile-sim .meter { height:4px; margin:2px 0; }
+    html.mobile-sim .wave-title { max-width:100%; overflow:hidden; font-size:7px; letter-spacing:.1em; text-overflow:ellipsis; white-space:nowrap; }
+    html.mobile-sim .wave-value { margin:2px 0; font-size:17px; }
+    html.mobile-sim .wave-sub { max-width:100%; overflow:hidden; font-size:7px; text-overflow:ellipsis; white-space:nowrap; }
+    html.mobile-sim .score-panel .hud-label-line > span:first-child { display:none; }
+    html.mobile-sim .score-panel .hud-label-line { justify-content:flex-end; }
+    html.mobile-sim .score-number { font-size:14px; line-height:1.05; }
+    html.mobile-sim .hud-bottom { top:82px; left:auto; right:58px; bottom:auto; display:block; }
+    html.mobile-sim .core-panel { width:94px; padding:4px 6px; }
+    html.mobile-sim .core-panel .hud-label-line strong { font-size:0; }
+    html.mobile-sim .core-panel .hud-label-line strong::after { content:"量子核心"; font-size:7px; }
+    html.mobile-sim #boss-hud { top:79px; width:min(390px,48vw); padding:4px 7px 5px; background:linear-gradient(90deg,rgba(13,5,26,.64),rgba(31,8,44,.42),rgba(13,5,26,.64)); }
+    html.mobile-sim .boss-line { font-size:7px; }
+    html.mobile-sim .boss-meter { height:6px; margin-top:3px; }
+    html.mobile-sim .joy-zone, html.mobile-sim .touch-btn { opacity:.72; }
+    html.mobile-sim .joy-zone.active, html.mobile-sim .touch-btn:active, html.mobile-sim .touch-btn.active { opacity:1; }
     @media (orientation: portrait) { html.mobile-sim .rotate-notice { display:grid; } }
 
     @media (orientation: portrait) and (pointer: coarse), (orientation: portrait) and (any-pointer: coarse) {
