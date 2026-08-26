@@ -560,6 +560,8 @@
     .rotate-notice b { color: var(--cyan); font-size: 28px; }
     .rotate-notice p { color: var(--muted); }
     .rotate-notice button { min-height:44px; margin-top:12px; padding:0 22px; color:#03131b; border:0; border-radius:8px; background:linear-gradient(120deg,#a7f6ff,var(--cyan)); font-weight:900; }
+    .orientation-toast { position:fixed; left:50%; top:18px; z-index:120; max-width:88vw; transform:translate(-50%,-12px); padding:9px 15px; color:#dffcff; border:1px solid rgba(72,231,255,.48); border-radius:22px; background:rgba(3,15,27,.94); box-shadow:0 0 24px rgba(72,231,255,.16); font-size:11px; letter-spacing:.04em; opacity:0; visibility:hidden; transition:opacity .2s ease,transform .2s ease,visibility .2s ease; pointer-events:none; }
+    .orientation-toast.show { opacity:1; visibility:visible; transform:translate(-50%,0); }
 
     @media (max-width: 840px) {
       .menu-layout { grid-template-columns: 1fr; }
@@ -640,6 +642,21 @@
 
     @media (orientation: portrait) and (pointer: coarse), (orientation: portrait) and (any-pointer: coarse) {
       .rotate-notice { display: grid; }
+    }
+
+    @media (orientation: portrait) {
+      html.manual-landscape .rotate-notice { display:none; }
+      html.manual-landscape #game-shell {
+        position:absolute;
+        left:50%;
+        top:50%;
+        width:min(100dvh, calc(100dvw * 16 / 9));
+        height:min(100dvw, calc(100dvh * 9 / 16));
+        min-width:0;
+        min-height:0;
+        transform:translate(-50%,-50%) rotate(90deg);
+        transform-origin:center;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -785,7 +802,8 @@
     </main>
   </div>
 
-  <div class="rotate-notice"><div><b>请横屏作战</b><p>量子战场已针对横屏双摇杆优化，旋转设备可获得完整视野。</p><button id="rotate-btn" type="button">进入横屏模式</button></div></div>
+  <div class="rotate-notice"><div><b>请横屏作战</b><p>优先调用系统横屏；若微信或 Safari 不支持，将自动启用兼容横屏。</p><button id="rotate-btn" type="button">进入横屏模式</button></div></div>
+  <div id="orientation-toast" class="orientation-toast">兼容横屏已开启，请将手机逆时针旋转</div>
 
   <script>
   (() => {
@@ -1094,16 +1112,45 @@
       showAnnouncement(stage.code, `第 ${stage.id} 关 · ${stage.name}`, `${stage.mechanic} // ${stage.brief}`, stage.accent, 3);
     }
 
+    function showOrientationToast(message) {
+      const toast=$("orientation-toast");toast.textContent=message;toast.classList.add("show");
+      clearTimeout(showOrientationToast.timer);showOrientationToast.timer=setTimeout(()=>toast.classList.remove("show"),3200);
+    }
+
+    function enableManualLandscape() {
+      if (!matchMedia("(orientation: portrait)").matches) return;
+      document.documentElement.classList.add("manual-landscape");
+      showOrientationToast("兼容横屏已开启，请将手机逆时针旋转");
+    }
+
+    function syncLandscapeState() {
+      if (matchMedia("(orientation: landscape)").matches) {
+        document.documentElement.classList.remove("manual-landscape");
+        $("orientation-toast").classList.remove("show");
+      }
+      const button=$("rotate-btn");button.disabled=false;button.removeAttribute("aria-busy");button.textContent="进入横屏模式";
+    }
+
     async function requestMobileLandscape() {
-      if (!touchDevice || disableFullscreen) return;
-      try {
-        if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
-          await document.documentElement.requestFullscreen({ navigationUI: "hide" });
-        }
-      } catch (_) {}
-      try {
-        if (screen.orientation && screen.orientation.lock) await screen.orientation.lock("landscape");
-      } catch (_) {}
+      if (!touchDevice) return;
+      const button=$("rotate-btn");button.disabled=true;button.setAttribute("aria-busy","true");button.textContent="正在切换…";
+      if (!disableFullscreen) {
+        try {
+          const root=document.documentElement;
+          const request=root.requestFullscreen||root.webkitRequestFullscreen;
+          if(!document.fullscreenElement&&!document.webkitFullscreenElement&&request){
+            await Promise.race([Promise.resolve(request.call(root,{navigationUI:"hide"})),new Promise(resolve=>setTimeout(resolve,500))]);
+          }
+        } catch (_) {}
+        try {
+          if(screen.orientation&&screen.orientation.lock){
+            await Promise.race([screen.orientation.lock("landscape"),new Promise(resolve=>setTimeout(resolve,650))]);
+          }
+        } catch (_) {}
+      }
+      if(matchMedia("(orientation: portrait)").matches)enableManualLandscape();
+      else showOrientationToast("系统横屏已开启");
+      syncLandscapeState();
     }
 
     function startGame() {
@@ -1658,7 +1705,8 @@
         const r=zone.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,max=r.width*.31;
         let dx=e.clientX-cx,dy=e.clientY-cy,d=Math.hypot(dx,dy);
         if(d>max){dx=dx/d*max;dy=dy/d*max;d=max;}
-        const nx=d<max*.11?0:dx/max,ny=d<max*.11?0:dy/max;
+        let nx=d<max*.11?0:dx/max,ny=d<max*.11?0:dy/max;
+        if(document.documentElement.classList.contains("manual-landscape")&&matchMedia("(orientation: portrait)").matches){const screenX=nx;nx=ny;ny=-screenX;}
         knob.style.transform=`translate(${nx*max}px,${ny*max}px)`;onMove(nx,ny,d/max);
       };
       const end=e=>{
@@ -1686,6 +1734,8 @@
     $("touch-dash").addEventListener("pointerdown",e=>{e.preventDefault();e.stopPropagation();haptic(12);tryDash(input.moveX,input.moveY);});
     $("touch-pause").addEventListener("pointerdown",e=>{e.preventDefault();e.stopPropagation();pauseGame();});
     $("rotate-btn").addEventListener("click",requestMobileLandscape);
+    window.addEventListener("orientationchange",()=>setTimeout(syncLandscapeState,140));
+    if(screen.orientation&&screen.orientation.addEventListener)screen.orientation.addEventListener("change",()=>setTimeout(syncLandscapeState,140));
 
     $("start-btn").addEventListener("click",()=>{requestMobileLandscape();startGame();});
     $("resume-btn").addEventListener("click",resumeGame);
