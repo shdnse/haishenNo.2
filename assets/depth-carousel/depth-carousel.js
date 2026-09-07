@@ -9863,7 +9863,7 @@ var Oi = /* @__PURE__ */ e(((e) => {
 	image: e,
 	alt: ""
 } : e;
-function ji({ items: e = G, cardWidth: t = 540, cardHeight: n = 400, radius: r = 18, tint: i = "#06110f", depth: a = 110, spread: o = 50, tilt: s = 10, tiltDirection: c = "right", perspective: u = 1400, visibleCards: d = 4, falloff: f = .16, blur: p = 2.5, duration: m = 700, ease: h = "power3.out", autoplay: g = !1, autoplayDelay: _ = 3200, loop: v = !0, showControls: y = !0, showIndicators: b = !0, onChange: x, className: S = "" }) {
+function ji({ items: e = G, cardWidth: t = 470, cardHeight: n = 388, radius: r = 18, tint: i = "#06110f", depth: a = 90, spread: o = 34, tilt: s = 9, tiltDirection: c = "right", perspective: u = 1400, visibleCards: d = 4, falloff: f = .12, blur: p = 0, duration: m = 700, ease: h = "power3.out", autoplay: g = !1, autoplayDelay: _ = 3200, loop: v = !0, showControls: y = !0, showIndicators: b = !0, onChange: x, className: S = "" }) {
 	let C = (0, l.useMemo)(() => (Array.isArray(e) ? e : []).map(Ai), [e]), w = C.length, T = (0, l.useRef)(null), E = (0, l.useRef)([]), D = (0, l.useRef)([]), O = (0, l.useRef)(0), k = (0, l.useRef)(0), A = (0, l.useRef)(null), j = (0, l.useRef)(1), M = (0, l.useRef)({}), N = (0, l.useRef)(x), P = (0, l.useRef)(null), F = (0, l.useRef)(!1), I = (0, l.useRef)(null), L = (0, l.useRef)(null), R = (0, l.useRef)(!1), [ee, te] = (0, l.useState)(0);
 	N.current = x, M.current = {
 		count: w,
@@ -9889,12 +9889,12 @@ function ji({ items: e = G, cardWidth: t = 540, cardHeight: n = 400, radius: r =
 			if (!a) continue;
 			let o = i - e;
 			t.loop && t.count > 1 && (o = (o % t.count + t.count) % t.count, o > t.count / 2 && (o -= t.count));
-			let s = Math.max(0, o), c = Math.abs(o) <= t.visibleCards + .5, l = -t.depth * o, u = n * t.spread * o, d = n * t.tilt * ki(o, 0, 1), f = o < 0 ? Math.max(0, 1 + o) : 1;
-			c || (f = 0);
-			let p = Math.max(.18, 1 - s * t.falloff), m = t.blur > 0 ? Math.min(t.blur, s / Math.max(1, t.visibleCards) * t.blur) : 0;
-			a.style.transform = `translate(-50%, -50%) scale(${r}) translateX(${u.toFixed(2)}px) translateZ(${l.toFixed(2)}px) rotateY(${d.toFixed(3)}deg)`, a.style.opacity = f.toFixed(3), a.style.filter = `brightness(${p.toFixed(3)}) blur(${m.toFixed(2)}px)`, a.style.zIndex = String(Math.round(2e3 - o * 20)), a.style.pointerEvents = c && f > .05 ? "auto" : "none";
-			let h = D.current[i];
-			h && (h.style.opacity = ki(s * t.falloff * 1.25, 0, .86).toFixed(3));
+			let s = Math.max(0, o), c = Math.abs(o), l = c < .001, u = c <= t.visibleCards + .5, d = -t.depth * o, f = n * t.spread * o, p = n * t.tilt * ki(o, 0, 1), m = o < 0 ? Math.max(0, 1 + o) : 1;
+			u || (m = 0);
+			let h = Math.max(.18, 1 - s * t.falloff), g = t.blur > 0 ? Math.min(t.blur, s / Math.max(1, t.visibleCards) * t.blur) : 0, _ = `translate(-50%, -50%) scale(${r})`;
+			a.style.transform = l ? _ : `${_} translateX(${f.toFixed(2)}px) translateZ(${d.toFixed(2)}px) rotateY(${p.toFixed(3)}deg)`, a.style.opacity = m.toFixed(3), a.style.filter = l ? "none" : g > 0 ? `brightness(${h.toFixed(3)}) blur(${g.toFixed(2)}px)` : `brightness(${h.toFixed(3)})`, a.style.backfaceVisibility = l ? "visible" : "hidden", a.style.willChange = l ? "auto" : "transform, opacity, filter", a.style.zIndex = String(Math.round(2e3 - o * 20)), a.style.pointerEvents = u && m > .05 ? "auto" : "none";
+			let v = D.current[i];
+			v && (v.style.opacity = ki(s * t.falloff * 1.25, 0, .86).toFixed(3));
 		}
 	}, []), ne = (0, l.useCallback)((e) => {
 		te(e), N.current?.(e, C[e]);
@@ -9924,8 +9924,8 @@ function ji({ items: e = G, cardWidth: t = 540, cardHeight: n = 400, radius: r =
 		let e = T.current;
 		if (!e) return;
 		let t = new ResizeObserver((e) => {
-			let t = e[0].contentRect.width, n = M.current, r = n.cardWidth + Math.abs(n.spread) * 2 + 120;
-			j.current = ki(t / r, .46, 1), z(O.current);
+			let t = e[0].contentRect.width, n = M.current.cardWidth + 88;
+			j.current = ki(t / n, .46, 1), z(O.current);
 		});
 		return t.observe(e), () => t.disconnect();
 	}, [z]), (0, l.useEffect)(() => {

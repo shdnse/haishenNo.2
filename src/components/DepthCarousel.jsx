@@ -14,18 +14,18 @@ const normalizeItem = item => (typeof item === 'string' ? { image: item, alt: ''
 
 export default function DepthCarousel({
   items = DEFAULT_ITEMS,
-  cardWidth = 540,
-  cardHeight = 400,
+  cardWidth = 470,
+  cardHeight = 388,
   radius = 18,
   tint = '#06110f',
-  depth = 110,
-  spread = 50,
-  tilt = 10,
+  depth = 90,
+  spread = 34,
+  tilt = 9,
   tiltDirection = 'right',
   perspective = 1400,
   visibleCards = 4,
-  falloff = 0.16,
-  blur = 2.5,
+  falloff = 0.12,
+  blur = 0,
   duration = 700,
   ease = 'power3.out',
   autoplay = false,
@@ -93,6 +93,7 @@ export default function DepthCarousel({
 
       const back = Math.max(0, distance);
       const absoluteDistance = Math.abs(distance);
+      const isCentered = absoluteDistance < 0.001;
       const shown = absoluteDistance <= cfg.visibleCards + 0.5;
       const translateZ = -cfg.depth * distance;
       const translateX = direction * cfg.spread * distance;
@@ -106,9 +107,18 @@ export default function DepthCarousel({
         ? Math.min(cfg.blur, (back / Math.max(1, cfg.visibleCards)) * cfg.blur)
         : 0;
 
-      card.style.transform = `translate(-50%, -50%) scale(${scale}) translateX(${translateX.toFixed(2)}px) translateZ(${translateZ.toFixed(2)}px) rotateY(${rotateY.toFixed(3)}deg)`;
+      const baseTransform = `translate(-50%, -50%) scale(${scale})`;
+      card.style.transform = isCentered
+        ? baseTransform
+        : `${baseTransform} translateX(${translateX.toFixed(2)}px) translateZ(${translateZ.toFixed(2)}px) rotateY(${rotateY.toFixed(3)}deg)`;
       card.style.opacity = opacity.toFixed(3);
-      card.style.filter = `brightness(${brightness.toFixed(3)}) blur(${blurPx.toFixed(2)}px)`;
+      card.style.filter = isCentered
+        ? 'none'
+        : blurPx > 0
+          ? `brightness(${brightness.toFixed(3)}) blur(${blurPx.toFixed(2)}px)`
+          : `brightness(${brightness.toFixed(3)})`;
+      card.style.backfaceVisibility = isCentered ? 'visible' : 'hidden';
+      card.style.willChange = isCentered ? 'auto' : 'transform, opacity, filter';
       card.style.zIndex = String(Math.round(2000 - distance * 20));
       card.style.pointerEvents = shown && opacity > 0.05 ? 'auto' : 'none';
 
@@ -196,7 +206,9 @@ export default function DepthCarousel({
     const resizeObserver = new ResizeObserver(entries => {
       const width = entries[0].contentRect.width;
       const cfg = cfgRef.current;
-      const neededWidth = cfg.cardWidth + Math.abs(cfg.spread) * 2 + 120;
+      // Keep the front certificate at its native CSS size whenever the card itself
+      // fits. The depth stack may clip at the edges without downscaling the source.
+      const neededWidth = cfg.cardWidth + 88;
       scaleRef.current = clamp(width / neededWidth, 0.46, 1);
       layout(posRef.current);
     });
