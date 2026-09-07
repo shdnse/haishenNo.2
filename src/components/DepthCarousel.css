@@ -172,13 +172,19 @@
   background: var(--primary);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 760px) {
   .depth-carousel {
-    height: 360px;
+    height: 430px;
   }
 
   .depth-carousel__stage {
     inset: 0 28px 32px;
+  }
+}
+
+@media (max-width: 640px) {
+  .depth-carousel {
+    height: 360px;
   }
 
   .depth-carousel__caption {

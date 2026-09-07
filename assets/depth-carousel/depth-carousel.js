@@ -9878,6 +9878,7 @@ function ji({ items: e = G, cardWidth: t = 470, cardHeight: n = 388, radius: r =
 		ease: h,
 		loop: v,
 		cardWidth: t,
+		cardHeight: n,
 		autoplayDelay: _
 	};
 	let z = (0, l.useCallback)((e) => {
@@ -9924,8 +9925,8 @@ function ji({ items: e = G, cardWidth: t = 470, cardHeight: n = 388, radius: r =
 		let e = T.current;
 		if (!e) return;
 		let t = new ResizeObserver((e) => {
-			let t = e[0].contentRect.width, n = M.current.cardWidth + 88;
-			j.current = ki(t / n, .46, 1), z(O.current);
+			let { width: t, height: n } = e[0].contentRect, r = M.current, i = r.cardWidth + 88, a = Math.max(n - 40, 1), o = t / i, s = a / r.cardHeight;
+			j.current = ki(Math.min(o, s), .46, 1), z(O.current);
 		});
 		return t.observe(e), () => t.disconnect();
 	}, [z]), (0, l.useEffect)(() => {

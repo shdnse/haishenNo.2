@@ -72,6 +72,7 @@ export default function DepthCarousel({
     ease,
     loop,
     cardWidth,
+    cardHeight,
     autoplayDelay
   };
 
@@ -204,12 +205,15 @@ export default function DepthCarousel({
     if (!root) return undefined;
 
     const resizeObserver = new ResizeObserver(entries => {
-      const width = entries[0].contentRect.width;
+      const { width, height } = entries[0].contentRect;
       const cfg = cfgRef.current;
       // Keep the front certificate at its native CSS size whenever the card itself
       // fits. The depth stack may clip at the edges without downscaling the source.
       const neededWidth = cfg.cardWidth + 88;
-      scaleRef.current = clamp(width / neededWidth, 0.46, 1);
+      const availableHeight = Math.max(height - 40, 1);
+      const widthScale = width / neededWidth;
+      const heightScale = availableHeight / cfg.cardHeight;
+      scaleRef.current = clamp(Math.min(widthScale, heightScale), 0.46, 1);
       layout(posRef.current);
     });
 
