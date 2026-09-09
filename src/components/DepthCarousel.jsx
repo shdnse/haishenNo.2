@@ -44,7 +44,10 @@ export default function DepthCarousel({
 
   const rootRef = useRef(null);
   const cardRefs = useRef([]);
+  const imageRefs = useRef([]);
   const overlayRefs = useRef([]);
+  const imageLoadsRef = useRef(new Map());
+  const navigationRequestRef = useRef(0);
   const posRef = useRef(0);
   const focusRef = useRef(0);
   const tweenRef = useRef(null);
@@ -92,9 +95,7 @@ export default function DepthCarousel({
         if (distance > cfg.count / 2) distance -= cfg.count;
       }
 
-      const back = Math.max(0, distance);
       const absoluteDistance = Math.abs(distance);
-      const isCentered = absoluteDistance < 0.001;
       const shown = absoluteDistance <= cfg.visibleCards + 0.5;
       const translateZ = -cfg.depth * distance;
       const translateX = direction * cfg.spread * distance;
@@ -103,32 +104,65 @@ export default function DepthCarousel({
       let opacity = distance < 0 ? Math.max(0, 1 + distance) : 1;
       if (!shown) opacity = 0;
 
-      const brightness = Math.max(0.18, 1 - back * cfg.falloff);
-      const blurPx = cfg.blur > 0
-        ? Math.min(cfg.blur, (back / Math.max(1, cfg.visibleCards)) * cfg.blur)
-        : 0;
-
-      const baseTransform = `translate(-50%, -50%) scale(${scale})`;
-      card.style.transform = isCentered
-        ? baseTransform
-        : `${baseTransform} translateX(${translateX.toFixed(2)}px) translateZ(${translateZ.toFixed(2)}px) rotateY(${rotateY.toFixed(3)}deg)`;
+      card.style.transform = `translate(-50%, -50%) scale(${scale}) translate3d(${translateX.toFixed(2)}px, 0, ${translateZ.toFixed(2)}px) rotateY(${rotateY.toFixed(3)}deg)`;
       card.style.opacity = opacity.toFixed(3);
-      card.style.filter = isCentered
-        ? 'none'
-        : blurPx > 0
-          ? `brightness(${brightness.toFixed(3)}) blur(${blurPx.toFixed(2)}px)`
-          : `brightness(${brightness.toFixed(3)})`;
-      card.style.backfaceVisibility = isCentered ? 'visible' : 'hidden';
-      card.style.willChange = isCentered ? 'auto' : 'transform, opacity, filter';
       card.style.zIndex = String(Math.round(2000 - distance * 20));
       card.style.pointerEvents = shown && opacity > 0.05 ? 'auto' : 'none';
 
       const overlay = overlayRefs.current[index];
       if (overlay) {
-        overlay.style.opacity = clamp(back * cfg.falloff * 1.25, 0, 0.86).toFixed(3);
+        overlay.style.opacity = clamp(Math.max(0, distance) * cfg.falloff * 1.25, 0, 0.86).toFixed(3);
       }
     }
   }, []);
+
+  const ensureImage = useCallback((rawIndex, priority = 'auto') => {
+    if (!count) return Promise.resolve();
+    const index = ((rawIndex % count) + count) % count;
+    const image = imageRefs.current[index];
+    const source = data[index]?.image;
+    if (!image || !source) return Promise.resolve();
+
+    image.fetchPriority = priority;
+    if (image.complete && image.naturalWidth > 0) {
+      const decoded = image.decode?.();
+      return decoded?.catch(() => undefined) || Promise.resolve();
+    }
+
+    const pending = imageLoadsRef.current.get(index);
+    if (pending) return pending;
+
+    const loading = new Promise(resolve => {
+      let settled = false;
+      const cleanup = () => {
+        image.removeEventListener('load', finish);
+        image.removeEventListener('error', fail);
+      };
+      const settle = () => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        resolve();
+      };
+      const finish = () => {
+        const decoded = image.decode?.();
+        if (decoded?.then) decoded.catch(() => undefined).finally(settle);
+        else settle();
+      };
+      const fail = () => {
+        image.dataset.loadError = 'true';
+        settle();
+      };
+
+      image.addEventListener('load', finish);
+      image.addEventListener('error', fail);
+      if (!image.getAttribute('src')) image.src = source;
+      if (image.complete) queueMicrotask(image.naturalWidth > 0 ? finish : fail);
+    }).finally(() => imageLoadsRef.current.delete(index));
+
+    imageLoadsRef.current.set(index, loading);
+    return loading;
+  }, [count, data]);
 
   const notify = useCallback(
     index => {
@@ -139,7 +173,7 @@ export default function DepthCarousel({
   );
 
   const tweenTo = useCallback(
-    (target, animate) => {
+    (target, animate, settledIndex) => {
       tweenRef.current?.kill();
       const cfg = cfgRef.current;
       const proxy = { position: posRef.current };
@@ -158,10 +192,11 @@ export default function DepthCarousel({
             posRef.current = ((posRef.current % cfg.count) + cfg.count) % cfg.count;
           }
           layout(posRef.current);
+          notify(settledIndex);
         }
       });
     },
-    [layout]
+    [layout, notify]
   );
 
   const setFocus = useCallback(
@@ -172,19 +207,19 @@ export default function DepthCarousel({
         ? ((rawIndex % cfg.count) + cfg.count) % cfg.count
         : clamp(rawIndex, 0, cfg.count - 1);
 
-      let delta = index - posRef.current;
-      if (cfg.loop && cfg.count > 1) {
-        delta = ((delta % cfg.count) + cfg.count) % cfg.count;
-        if (delta > cfg.count / 2) delta -= cfg.count;
-      }
-
-      tweenTo(posRef.current + delta, animate);
-      if (index !== focusRef.current) {
+      const requestId = ++navigationRequestRef.current;
+      ensureImage(index, 'high').then(() => {
+        if (requestId !== navigationRequestRef.current) return;
+        let delta = index - posRef.current;
+        if (cfg.loop && cfg.count > 1) {
+          delta = ((delta % cfg.count) + cfg.count) % cfg.count;
+          if (delta > cfg.count / 2) delta -= cfg.count;
+        }
         focusRef.current = index;
-        notify(index);
-      }
+        tweenTo(posRef.current + delta, animate, index);
+      });
     },
-    [notify, tweenTo]
+    [ensureImage, tweenTo]
   );
 
   const navigateBy = useCallback(
@@ -199,6 +234,28 @@ export default function DepthCarousel({
     setActive(0);
     layout(0);
   }, [count, layout]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const waitForIdle = () => new Promise(resolve => {
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(resolve, { timeout: 700 });
+      } else {
+        window.setTimeout(resolve, 90);
+      }
+    });
+    const warmImages = async () => {
+      const order = [...new Set([0, 1, count - 1, ...Array.from({ length: count }, (_, index) => index)])];
+      for (let position = 0; position < order.length; position += 1) {
+        if (cancelled) return;
+        if (position > 1) await waitForIdle();
+        if (cancelled) return;
+        await ensureImage(order[position], position < 2 ? 'high' : 'low');
+      }
+    };
+    warmImages();
+    return () => { cancelled = true; };
+  }, [count, ensureImage]);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -404,8 +461,13 @@ export default function DepthCarousel({
             <div className="depth-carousel__media">
               <img
                 className="depth-carousel__img"
-                src={item.image}
+                ref={element => { imageRefs.current[index] = element; }}
+                src={index === 0 ? item.image : undefined}
+                data-src={item.image}
                 alt={item.alt || item.name || ''}
+                loading={index === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+                fetchPriority={index === 0 ? 'high' : 'low'}
                 draggable={false}
               />
               <span

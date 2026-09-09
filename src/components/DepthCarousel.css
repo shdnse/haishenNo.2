@@ -42,8 +42,10 @@
   box-shadow: 0 22px 50px color-mix(in srgb, var(--text) 18%, transparent);
   transform-style: preserve-3d;
   transform-origin: center;
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  filter: none;
 }
 
 .depth-carousel__card[aria-hidden="false"] {
@@ -58,6 +60,8 @@
   min-height: 0;
   overflow: hidden;
   background: color-mix(in srgb, var(--surface-2) 86%, var(--primary));
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .depth-carousel__img {
@@ -67,6 +71,8 @@
   object-fit: contain;
   background: #fff;
   pointer-events: none;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .depth-carousel__tint {
@@ -85,8 +91,7 @@
   gap: 6px 14px;
   min-height: 58px;
   padding: 10px 13px;
-  background: color-mix(in srgb, var(--surface-2) 92%, transparent);
-  backdrop-filter: blur(14px);
+  background: color-mix(in srgb, var(--surface-2) 97%, var(--primary));
 }
 
 .depth-carousel__name {

@@ -1,4 +1,3 @@
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import DepthCarousel from './components/DepthCarousel';
@@ -17,8 +16,6 @@ if (mountNode && sourceItems.length) {
   };
 
   createRoot(mountNode).render(
-    <StrictMode>
-      <DepthCarousel items={sourceItems} onChange={updateStatus} />
-    </StrictMode>
+    <DepthCarousel items={sourceItems} onChange={updateStatus} />
   );
 }
