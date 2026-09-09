@@ -9898,8 +9898,7 @@ function Mi({ items: e = W, cardWidth: t = 470, cardHeight: n = 388, radius: r =
 	}, []), ie = (0, l.useCallback)((e, t = "auto") => {
 		if (!w) return Promise.resolve();
 		let n = (e % w + w) % w, r = D.current[n], i = C[n]?.image;
-		if (!r || !i) return Promise.resolve();
-		if (r.fetchPriority = t, r.complete && r.naturalWidth > 0) return (r.decode?.())?.catch(() => void 0) || Promise.resolve();
+		if (!r || !i || (r.fetchPriority = t, r.dataset.decoded === "true")) return Promise.resolve();
 		let a = k.current.get(n);
 		if (a) return a;
 		let o = new Promise((e) => {
@@ -9909,7 +9908,9 @@ function Mi({ items: e = W, cardWidth: t = 470, cardHeight: n = 388, radius: r =
 				t || (t = !0, n(), e());
 			}, o = () => {
 				let e = r.decode?.();
-				e?.then ? e.catch(() => void 0).finally(a) : a();
+				e?.then ? e.catch(() => void 0).finally(() => {
+					r.dataset.decoded = "true", a();
+				}) : (r.dataset.decoded = "true", a());
 			}, s = () => {
 				r.dataset.loadError = "true", a();
 			};
@@ -9936,10 +9937,10 @@ function Mi({ items: e = W, cardWidth: t = 470, cardHeight: n = 388, radius: r =
 		let n = F.current;
 		if (!n.count) return;
 		let r = n.loop ? (e % n.count + n.count) % n.count : Ai(e, 0, n.count - 1), i = ++A.current;
-		ie(r, "high").then(() => {
+		M.current = r, ie(r, "high").then(() => {
 			if (i !== A.current) return;
 			let e = r - j.current;
-			n.loop && n.count > 1 && (e = (e % n.count + n.count) % n.count, e > n.count / 2 && (e -= n.count)), M.current = r, oe(j.current + e, t, r);
+			n.loop && n.count > 1 && (e = (e % n.count + n.count) % n.count, e > n.count / 2 && (e -= n.count)), oe(j.current + e, t, r);
 		});
 	}, [ie, oe]), ce = (0, l.useCallback)((e) => se(M.current + e, !0), [se]);
 	(0, l.useEffect)(() => {

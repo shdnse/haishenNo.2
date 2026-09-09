@@ -124,10 +124,7 @@ export default function DepthCarousel({
     if (!image || !source) return Promise.resolve();
 
     image.fetchPriority = priority;
-    if (image.complete && image.naturalWidth > 0) {
-      const decoded = image.decode?.();
-      return decoded?.catch(() => undefined) || Promise.resolve();
-    }
+    if (image.dataset.decoded === 'true') return Promise.resolve();
 
     const pending = imageLoadsRef.current.get(index);
     if (pending) return pending;
@@ -146,8 +143,17 @@ export default function DepthCarousel({
       };
       const finish = () => {
         const decoded = image.decode?.();
-        if (decoded?.then) decoded.catch(() => undefined).finally(settle);
-        else settle();
+        if (decoded?.then) {
+          decoded
+            .catch(() => undefined)
+            .finally(() => {
+              image.dataset.decoded = 'true';
+              settle();
+            });
+        } else {
+          image.dataset.decoded = 'true';
+          settle();
+        }
       };
       const fail = () => {
         image.dataset.loadError = 'true';
@@ -208,6 +214,9 @@ export default function DepthCarousel({
         : clamp(rawIndex, 0, cfg.count - 1);
 
       const requestId = ++navigationRequestRef.current;
+      // Advance the requested focus immediately so rapid taps queue distinct
+      // slides instead of repeatedly requesting the same still-decoding image.
+      focusRef.current = index;
       ensureImage(index, 'high').then(() => {
         if (requestId !== navigationRequestRef.current) return;
         let delta = index - posRef.current;
@@ -215,7 +224,6 @@ export default function DepthCarousel({
           delta = ((delta % cfg.count) + cfg.count) % cfg.count;
           if (delta > cfg.count / 2) delta -= cfg.count;
         }
-        focusRef.current = index;
         tweenTo(posRef.current + delta, animate, index);
       });
     },
