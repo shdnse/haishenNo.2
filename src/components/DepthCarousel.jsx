@@ -244,26 +244,29 @@ export default function DepthCarousel({
   }, [count, layout]);
 
   useEffect(() => {
+    if (!count) return undefined;
     let cancelled = false;
-    const waitForIdle = () => new Promise(resolve => {
-      if ('requestIdleCallback' in window) {
-        window.requestIdleCallback(resolve, { timeout: 700 });
-      } else {
-        window.setTimeout(resolve, 90);
-      }
-    });
-    const warmImages = async () => {
-      const order = [...new Set([0, 1, count - 1, ...Array.from({ length: count }, (_, index) => index)])];
-      for (let position = 0; position < order.length; position += 1) {
-        if (cancelled) return;
-        if (position > 1) await waitForIdle();
-        if (cancelled) return;
-        await ensureImage(order[position], position < 2 ? 'high' : 'low');
-      }
+    let idleId;
+    let fallbackTimer;
+
+    const warmCurrentAndNext = async () => {
+      await ensureImage(active, active === 0 ? 'high' : 'auto');
+      if (cancelled || count < 2) return;
+      ensureImage(active + 1, 'low');
     };
-    warmImages();
-    return () => { cancelled = true; };
-  }, [count, ensureImage]);
+
+    if ('requestIdleCallback' in window) {
+      idleId = window.requestIdleCallback(warmCurrentAndNext, { timeout: 500 });
+    } else {
+      fallbackTimer = window.setTimeout(warmCurrentAndNext, 80);
+    }
+
+    return () => {
+      cancelled = true;
+      if (idleId !== undefined) window.cancelIdleCallback(idleId);
+      clearTimeout(fallbackTimer);
+    };
+  }, [active, count, ensureImage]);
 
   useEffect(() => {
     const root = rootRef.current;

@@ -9946,24 +9946,18 @@ function Mi({ items: e = W, cardWidth: t = 470, cardHeight: n = 388, radius: r =
 	(0, l.useEffect)(() => {
 		ne.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches, j.current = 0, M.current = 0, z(0), B(0);
 	}, [w, B]), (0, l.useEffect)(() => {
-		let e = !1, t = () => new Promise((e) => {
-			"requestIdleCallback" in window ? window.requestIdleCallback(e, { timeout: 700 }) : window.setTimeout(e, 90);
-		});
-		return (async () => {
-			let n = [.../* @__PURE__ */ new Set([
-				0,
-				1,
-				w - 1,
-				...Array.from({ length: w }, (e, t) => t)
-			])];
-			for (let r = 0; r < n.length; r += 1) {
-				if (e || (r > 1 && await t(), e)) return;
-				await ie(n[r], r < 2 ? "high" : "low");
-			}
-		})(), () => {
-			e = !0;
+		if (!w) return;
+		let e = !1, t, n, r = async () => {
+			await ie(re, re === 0 ? "high" : "auto"), !(e || w < 2) && ie(re + 1, "low");
 		};
-	}, [w, ie]), (0, l.useEffect)(() => {
+		return "requestIdleCallback" in window ? t = window.requestIdleCallback(r, { timeout: 500 }) : n = window.setTimeout(r, 80), () => {
+			e = !0, t !== void 0 && window.cancelIdleCallback(t), clearTimeout(n);
+		};
+	}, [
+		re,
+		w,
+		ie
+	]), (0, l.useEffect)(() => {
 		let e = T.current;
 		if (!e) return;
 		let t = new ResizeObserver((e) => {
