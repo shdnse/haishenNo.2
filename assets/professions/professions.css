@@ -1,0 +1,40 @@
+.professions{position:relative;background:linear-gradient(#110e10,#170c0e 50%,#110e10);padding-bottom:35px;isolation:isolate}
+.profession-heading{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:42px}
+.profession-heading .eyebrow{margin-bottom:20px}
+.profession-heading h2{font-size:clamp(28px,3.4vw,45px)}
+.profession-hint{font-size:14px;line-height:1.9;color:var(--muted);flex-shrink:0}
+.profession-pan{position:relative;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;scrollbar-color:#75343d #1b1013;border:1px solid #92484b35;overscroll-behavior-x:contain;touch-action:pan-x pan-y;scroll-behavior:smooth}
+.profession-scene{position:relative;aspect-ratio:1672/941;width:100%;overflow:hidden;background:#150b0d;isolation:isolate}
+.profession-backdrop{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:contain}
+.profession-art{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.profession-figure{opacity:0;transform:scale(.925);transform-box:view-box;transform-origin:var(--origin);pointer-events:none;transition:opacity 650ms ease,transform 1050ms cubic-bezier(.2,.75,.2,1)}
+.professions[data-ready="true"] .profession-figure.is-revealed{opacity:1;transform:scale(1)}
+.profession-target{fill:transparent;pointer-events:all;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.profession-scene-shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,#11090ceb,transparent 17%,transparent 94%,#11090c42)}
+.profession-scene-note{position:absolute;bottom:3%;left:50%;transform:translateX(-50%);font:12px Georgia,serif;letter-spacing:.28em;color:#ac8585;white-space:nowrap;pointer-events:none}
+.profession-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-bottom:1px solid #92484b35}
+.profession-choice{position:relative;display:flex;align-items:center;flex-direction:column;gap:9px;padding:26px 10px 25px;text-align:center;min-width:0;transition:background .35s,color .35s;touch-action:manipulation}
+.profession-choice+.profession-choice{border-left:1px solid #92484b25}
+.profession-choice::before{content:"";position:absolute;top:0;left:15%;right:15%;height:1px;background:#e17975;transform:scaleX(0);transition:transform .5s}
+.profession-choice.is-revealed{background:radial-gradient(ellipse at 50% 0%,#79292f3d,transparent 78%)}
+.profession-choice.is-revealed::before{transform:scaleX(1)}
+.profession-index{font:12px Georgia,serif;letter-spacing:.13em;color:#9a696e}
+.profession-name{font:26px/1.5 var(--serif);letter-spacing:.14em;color:#d5c6b7}
+.profession-traits{font-size:12px;color:#a5908c;letter-spacing:.08em}
+.profession-state{font-size:12px;color:#956f74;margin-top:4px}
+.profession-choice[aria-pressed="true"] .profession-state{color:#efa79f}
+.profession-choice:focus-visible{outline-offset:-4px;outline-color:var(--light-red)}
+.profession-footer{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;color:#a38b8c;font-size:12px;line-height:1.8;margin-top:20px;text-align:center;min-height:24px}
+.profession-mobile-hint{display:none}
+@media(max-width:1000px){.profession-heading{display:block}.profession-hint{margin-top:20px}.profession-hint br{display:none}}
+@media(max-width:700px){
+  .professions{padding-top:65px;padding-bottom:20px}.profession-heading{margin-bottom:28px}.profession-heading h2{font-size:30px;max-width:360px}
+  .profession-heading h2 em{display:block}.profession-hint{font-size:13px}.profession-hint br{display:block}
+  .profession-pan{width:100%;border-left:0;border-right:0}.profession-scene{width:900px;max-width:none}
+  .profession-controls{width:100%}.profession-choice{padding:20px 3px;gap:8px}.profession-index{font-size:11px;letter-spacing:0}
+  .profession-name{font-size:22px}.profession-traits{font-size:12px;line-height:1.8;letter-spacing:0;max-width:5em}
+  .profession-state{font-size:11px}.profession-footer{display:block}.profession-mobile-hint{display:block;color:#a47077;margin-bottom:8px}
+}
+@media(prefers-reduced-motion:reduce){.profession-figure{transition:none;transform:none!important}.profession-pan{scroll-behavior:auto}}
+body[data-motion="paused"] .profession-figure{transition:none;transform:none}
+@media print{.professions{display:none}}

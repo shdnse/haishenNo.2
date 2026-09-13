@@ -12,8 +12,10 @@
   <link rel="preload" as="image" href="头像.jpg">
   <link rel="stylesheet" href="assets/archive/archive.css?v=archive-1">
   <script src="assets/archive/archive.js?v=archive-1" defer></script>
+  <link rel="stylesheet" href="assets/professions/professions.css?v=professions-1">
+  <script src="assets/professions/professions.js?v=professions-1" defer></script>
 </head>
-<body data-version="archive-1">
+<body data-version="professions-1">
   <a class="skip-link" href="#projects">跳到代表项目</a>
   <header class="site-header">
     <a class="wordmark" href="#home" aria-label="蔡鑫海，返回首页"><span class="brand-sigil" aria-hidden="true">✧</span> CXH<span class="wordmark-caption">PERSONAL ARCHIVE</span></a>
@@ -61,10 +63,54 @@
         </figure>
       </div>
       <div class="hero-bottom shell">
-        <a class="scroll-cue" href="#projects"><span aria-hidden="true">↓</span> SCROLL TO DISCOVER</a>
+        <a class="scroll-cue" href="#professions"><span aria-hidden="true">↓</span> SCROLL TO DISCOVER</a>
         <div class="wallpaper-credit"><button type="button" id="soundToggle" aria-pressed="false"><span aria-hidden="true">♫</span> 开启原壁纸音乐</button><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3715870843" target="_blank" rel="noopener noreferrer">荆棘1 · IMMORTAL ↗</a></div>
       </div>
       <audio id="wallpaperAudio" src="assets/archive/wallpaper/soundtrack.mp3" preload="none" loop></audio>
+    </section>
+    <section class="professions section" id="professions" aria-labelledby="professionsTitle">
+      <div class="profession-heading shell">
+        <div><p class="eyebrow">CHOOSE YOUR CALLING / 职业之境</p><h2 id="professionsTitle">你会以何种身份，<em>踏入未知？</em></h2></div>
+        <p class="profession-hint">靠近人物，唤醒形象。<br>点击保留选择，再次点击取消。</p>
+      </div>
+      <div class="profession-pan shell" id="professionPan" tabindex="0" role="group" aria-label="四位幻想职业人物；小屏可左右滑动，也可使用下方职业按钮选择">
+        <div class="profession-scene">
+          <img class="profession-backdrop" src="assets/professions/silhouettes-original.png" alt="血月城堡前，骑士、王子、女巫与弓手的黑色剪影" width="1672" height="941" loading="lazy" decoding="async">
+          <svg class="profession-art" viewBox="0 0 1672 941" aria-hidden="true" focusable="false">
+            <defs>
+              <filter id="professionSilhouetteMatte" color-interpolation-filters="sRGB" x="0" y="0" width="100%" height="100%">
+                <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  -6 -4 -3 0 1"/>
+                <feComponentTransfer><feFuncA type="linear" slope="4" intercept="-1"/></feComponentTransfer>
+                <feGaussianBlur stdDeviation=".6"/>
+              </filter>
+              <mask id="professionMatte" maskUnits="userSpaceOnUse" x="0" y="0" width="1672" height="941" style="mask-type:alpha"><image href="assets/professions/silhouettes-original.png" width="1672" height="941" filter="url(#professionSilhouetteMatte)"/></mask>
+              <clipPath id="professionKnight"><path d="M300 34L319 27 352 30 379 55 380 91 395 128 430 131 451 145 496 161 494 196 505 249 515 311 565 439 583 554 663 650 703 683 639 686 585 670 518 642 484 675 465 739 460 817 504 848 479 875 422 863 389 793 377 720 328 681 284 659 258 719 254 798 287 835 282 853 230 850 202 775 203 698 166 720 142 747 112 790 139 736 164 619 153 510 140 474 140 781 126 802 115 480 98 481 98 434 117 391 136 376 132 345 108 345 42 408 0 471 0 320 62 315 150 270 213 239 246 176 281 153 279 118 284 72Z"/></clipPath>
+              <clipPath id="professionPrince"><path d="M708 117L742 121 759 144 771 181 760 210 780 222 823 237 845 249 869 292 882 350 910 400 925 486 932 575 949 645 973 760 990 843 951 878 872 887 781 883 687 874 621 849 588 800 576 715 647 697 711 688 670 650 622 634 599 580 575 520 577 475 591 435 580 401 591 347 612 298 630 256 666 232 691 224 677 195 673 163 683 133Z"/></clipPath>
+              <clipPath id="professionWitch"><path d="M943 199L990 181 1023 150 1050 145 1090 164 1110 185 1190 194 1217 211 1208 239 1163 266 1169 302 1175 332 1224 365 1248 351 1257 318 1247 291 1264 278 1275 288 1282 272 1294 275 1298 294 1295 315 1277 338 1274 379 1261 435 1279 486 1289 557 1294 623 1317 693 1335 768 1363 858 1322 889 1238 903 1111 891 1024 885 945 873 926 819 943 781 946 702 941 647 919 609 917 554 930 518 914 467 884 445 920 419 880 402 924 382 887 370 925 353 880 342 944 318 928 304 968 286 986 270 946 258 919 236Z"/></clipPath>
+              <clipPath id="professionArcher"><path d="M1375 289L1401 258 1431 250 1462 260 1481 282 1491 314 1477 337 1505 356 1541 402 1559 439 1564 475 1582 464 1610 425 1634 379 1657 365 1669 374 1646 388 1631 430 1611 478 1579 519 1543 552 1531 584 1561 637 1579 690 1606 760 1594 808 1563 788 1549 752 1523 796 1511 836 1517 886 1493 908 1463 897 1466 857 1445 795 1404 775 1371 824 1350 883 1316 900 1294 884 1319 844 1328 802 1307 777 1305 736 1341 685 1371 607 1407 567 1390 552 1340 546 1308 558 1283 583 1272 572 1293 552 1328 532 1378 511 1394 470 1376 434 1338 424 1314 392 1323 369 1310 339 1307 304 1317 283 1327 306 1331 290 1344 317 1355 332 1368 315Z"/></clipPath>
+            </defs>
+            <g class="profession-figure" data-character="knight" style="--origin:20% 91%"><g clip-path="url(#professionKnight)"><g mask="url(#professionMatte)"><image data-src="assets/professions/characters-original.png" width="1672" height="941"/></g></g></g>
+            <g class="profession-figure" data-character="prince" style="--origin:46% 93%"><g clip-path="url(#professionPrince)"><g mask="url(#professionMatte)"><image data-src="assets/professions/characters-original.png" width="1672" height="941"/></g></g></g>
+            <g class="profession-figure" data-character="witch" style="--origin:66% 94%"><g clip-path="url(#professionWitch)"><g mask="url(#professionMatte)"><image data-src="assets/professions/characters-original.png" width="1672" height="941"/></g></g></g>
+            <g class="profession-figure" data-character="archer" style="--origin:86% 96%"><g clip-path="url(#professionArcher)"><g mask="url(#professionMatte)"><image data-src="assets/professions/characters-original.png" width="1672" height="941"/></g></g></g>
+            <g class="profession-targets">
+              <path class="profession-target" data-character="knight" d="M280 26H390L507 165 558 354 551 590 489 883H152L110 620 86 386 186 218Z"/>
+              <path class="profession-target" data-character="prince" d="M682 115H767L873 249 926 507 981 888H627L574 632 568 456 608 281Z"/>
+              <path class="profession-target" data-character="witch" d="M1018 139L1120 171 1217 196 1191 276 1179 340 1302 269 1288 473 1318 644 1360 900H959L911 779 906 508 875 340 937 277 910 213Z"/>
+              <path class="profession-target" data-character="archer" d="M1387 251H1470L1510 346 1573 462 1666 361 1640 465 1564 562 1607 775 1535 847 1512 912H1294L1335 789 1307 739 1374 602 1276 588 1319 524 1390 474 1308 387 1304 284 1370 330Z"/>
+            </g>
+          </svg>
+          <div class="profession-scene-shade" aria-hidden="true"></div>
+          <span class="profession-scene-note" aria-hidden="true">FOUR PATHS. YOUR CHOICE.</span>
+        </div>
+      </div>
+      <div class="profession-controls shell" role="group" aria-label="独立选择喜欢的职业，可多选">
+        <button type="button" class="profession-choice" data-character="knight" aria-pressed="false"><span class="profession-index">I / KNIGHT</span><span class="profession-name">骑士</span><span class="profession-traits">忠诚 · 勇气 · 守护</span><span class="profession-state">唤醒形象 ＋</span></button>
+        <button type="button" class="profession-choice" data-character="prince" aria-pressed="false"><span class="profession-index">II / PRINCE</span><span class="profession-name">王子</span><span class="profession-traits">智慧 · 领导 · 理想</span><span class="profession-state">唤醒形象 ＋</span></button>
+        <button type="button" class="profession-choice" data-character="witch" aria-pressed="false"><span class="profession-index">III / WITCH</span><span class="profession-name">女巫</span><span class="profession-traits">知识 · 魔法 · 探索</span><span class="profession-state">唤醒形象 ＋</span></button>
+        <button type="button" class="profession-choice" data-character="archer" aria-pressed="false"><span class="profession-index">IV / ARCHER</span><span class="profession-name">弓手</span><span class="profession-traits">自由 · 敏锐 · 远见</span><span class="profession-state">唤醒形象 ＋</span></button>
+      </div>
+      <div class="profession-footer shell"><p class="profession-mobile-hint">↔ 左右滑动画面，或点击上方职业定位</p><p id="professionStatus" role="status" aria-live="polite">四条道路，等待你的选择。</p></div>
     </section>
     <section class="projects section shell" id="projects" aria-labelledby="projectsTitle">
       <div class="section-heading"><div><p class="eyebrow">01 / SELECTED WORKS</p><h2 id="projectsTitle">从想法，<em>到作品。</em></h2></div><p class="section-aside">四个独立实践<br>点击入口，亲自探索。</p></div>

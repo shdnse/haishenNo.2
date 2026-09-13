@@ -23,7 +23,10 @@ assert.equal([...html.matchAll(/<article class="project">/g)].length, 4, 'Four p
 assert.deepEqual([...html.matchAll(/class="contact-row" data-value="([^"]+)"/g)].map(m => m[1]),
   ['深圳', '18772308691', '3291191486@qq.com', 'shenrenhxc'], 'Contact order and data');
 const sections = [...html.matchAll(/<section\b[^>]*\bid="([^"]+)"/g)].map(m => m[1]);
-assert.deepEqual(sections, ['home', 'projects', 'education', 'contact'], 'Requested sections only');
+assert.deepEqual(sections, ['home', 'professions', 'projects', 'education', 'contact'], 'Requested section order');
+assert.equal([...html.matchAll(/class="profession-choice"/g)].length, 4, 'Four independent profession choices');
+assert.equal([...html.matchAll(/class="profession-figure"/g)].length, 4, 'Four independent foreground layers');
+new vm.Script(readFileSync(resolve(root, 'assets/professions/professions.js'), 'utf8'));
 
 let checkedAssets = 0;
 function checkReference(value, directory = root) {
