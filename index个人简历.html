@@ -12,10 +12,11 @@
   <link rel="preload" as="image" href="头像.jpg">
   <link rel="stylesheet" href="assets/archive/archive.css?v=archive-1">
   <script src="assets/archive/archive.js?v=archive-1" defer></script>
-  <link rel="stylesheet" href="assets/professions/professions.css?v=professions-2">
+  <link rel="stylesheet" href="assets/professions/professions.css?v=immersive-5">
   <script src="assets/professions/professions.js?v=professions-2" defer></script>
+  <link rel="stylesheet" href="assets/project-scene/timeline.css?v=timeline-1">
 </head>
-<body data-version="professions-2">
+<body data-version="timeline-1">
   <a class="skip-link" href="#projects">跳到代表项目</a>
   <header class="site-header">
     <a class="wordmark" href="#home" aria-label="蔡鑫海，返回首页"><span class="brand-sigil" aria-hidden="true">✧</span> CXH<span class="wordmark-caption">PERSONAL ARCHIVE</span></a>
@@ -112,9 +113,19 @@
       </div>
       <div class="profession-footer shell"><p class="profession-mobile-hint">↔ 左右滑动画面，或点击上方职业定位</p><p id="professionStatus" role="status" aria-live="polite">四条道路，等待你的选择。</p></div>
     </section>
-    <section class="projects section shell" id="projects" aria-labelledby="projectsTitle">
-      <div class="section-heading"><div><p class="eyebrow">01 / SELECTED WORKS</p><h2 id="projectsTitle">从想法，<em>到作品。</em></h2></div><p class="section-aside">四个独立实践<br>点击入口，亲自探索。</p></div>
-      <div class="project-list">
+    <section class="projects section" id="projects" aria-labelledby="projectsTitle">
+      <div class="projects-environment" aria-hidden="true"></div>
+      <div class="projects-layout">
+        <div class="projects-intro">
+          <p class="eyebrow">01 / SELECTED WORKS</p>
+          <h2 id="projectsTitle">从想法，<br><em>到作品。</em></h2>
+          <p class="projects-intro-copy">每一个作品，都是一次<br>把想法变成现实的尝试。</p>
+          <div class="projects-intro-rule" aria-hidden="true"><span>Ⅰ — Ⅳ</span><i></i><span>EXPLORE</span></div>
+          <p class="projects-intro-hint">沿着印记，亲自探索。<span aria-hidden="true">↓</span></p>
+        </div>
+        <div class="projects-narrative">
+          <p class="timeline-kicker">FOUR INDEPENDENT EXPLORATIONS <span>四个独立实践</span></p>
+          <div class="project-list" aria-label="四个代表项目的探索时间轴">
         <article class="project">
           <span class="project-index">I</span>
           <div class="project-copy"><p class="project-type">WEB DESIGN & DEVELOPMENT</p><h3>个人简介网站搭建</h3><p>围绕教育、认证、项目与联系方式完成内容撰写、信息架构和视觉设计，构建移动优先的个人展示入口。</p><p class="project-result">红黑动态首页、城堡证书陈列墙与交互式联系方式，让个人信息拥有独特的表达。</p><ul class="project-tags" aria-label="项目特点"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>响应式设计</li></ul></div>
@@ -135,6 +146,9 @@
           <div class="project-copy"><p class="project-type">CANVAS / TANK ROGUELITE</p><h3>量子钢潮 <span>· 终局堡垒</span></h3><p>四类原创科幻坦克、五大主题战区；双向移动射击、永久合金墙、潮汐 / 熔岩 / 寒霜 / 电磁 / 虚空地形，补给事件与战斗模块三选一。</p><p class="project-result">差异化战车、强化基地与自律炮台，移动端双摇杆、辅助锁敌与全屏横屏操作；三阶段巨型 Boss「虚空收割者」。</p><ul class="project-tags" aria-label="项目特点"><li>Canvas</li><li>JavaScript</li><li>移动端双摇杆</li><li>Roguelite</li><li>Boss 状态机</li></ul></div>
           <a class="project-link" href="量子钢潮坦克大战.html" target="_blank" rel="noopener" aria-label="立即试玩量子钢潮，在新标签页打开">立即试玩 <span aria-hidden="true">↗</span></a>
         </article>
+          </div>
+          <p class="timeline-end"><span aria-hidden="true">✧</span> 下一段故事，仍在书写。</p>
+        </div>
       </div>
     </section>
     <section class="gallery section" id="education" aria-labelledby="educationTitle">

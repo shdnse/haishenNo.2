@@ -38,3 +38,37 @@
 @media(prefers-reduced-motion:reduce){.profession-figure{transition:none;transform:none!important}.profession-pan{scroll-behavior:auto}}
 body[data-motion="paused"] .profession-figure{transition:none;transform:none}
 @media print{.professions{display:none}}
+
+/* The artwork is the room itself: roughly 90% of the section, with its
+   controls over the foreground instead of another large boxed panel. */
+.professions.section{padding:0;background:#110e10}
+.profession-heading{height:clamp(60px,6.2vw,88px);margin-bottom:0;align-items:center;gap:20px}
+.profession-heading .eyebrow{font-size:10px;letter-spacing:.18em;margin-bottom:3px}
+.profession-heading h2{font-size:clamp(20px,2.2vw,32px);line-height:1.3}
+.profession-hint{font-size:12px;margin:0;line-height:1.65}
+.profession-pan{width:100%;border:0;scrollbar-width:none}
+.profession-pan::-webkit-scrollbar{display:none}
+.profession-scene-shade{background:linear-gradient(180deg,#110e10 0%,transparent 9%,transparent 68%,#110e10ee 95%,#110e10 100%)}
+.profession-scene-note{bottom:17%;font-size:10px;opacity:.65}
+.profession-controls{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:3;border:0;width:min(1400px,94%)}
+.profession-choice{padding:10px 8px;gap:2px;text-shadow:0 2px 14px #000}
+.profession-choice+.profession-choice{border:0}
+.profession-choice::before{left:34%;right:34%}
+.profession-index{font-size:10px;letter-spacing:.18em}
+.profession-name{font-size:clamp(23px,2.7vw,38px);line-height:1.5}
+.profession-traits{font-size:11px;letter-spacing:.12em}
+.profession-state{font-size:11px;margin-top:1px}
+.profession-footer{position:absolute;z-index:3;bottom:6px;left:50%;transform:translateX(-50%);margin:0;min-height:20px;font-size:11px;pointer-events:none}
+@media(max-width:1000px){.profession-heading{display:flex}.profession-hint br{display:block}.profession-controls{bottom:29px}.profession-scene-note{bottom:24%}}
+@media(max-width:700px){
+  .profession-heading{height:56px;width:calc(100% - 32px)}
+  .profession-heading .eyebrow{font-size:9px;letter-spacing:.1em}
+  .profession-heading h2{font-size:20px;max-width:none}.profession-heading h2 em{display:inline}
+  .profession-hint{display:none}.profession-scene{width:900px}
+  .profession-controls{width:100%;bottom:47px}.profession-choice{padding:8px 1px;gap:2px}
+  .profession-index{font-size:9px;letter-spacing:0}.profession-name{font-size:23px}
+  .profession-traits{font-size:10px;max-width:none;letter-spacing:0}.profession-state{font-size:10px}
+  .profession-footer{width:100%;font-size:10px;line-height:1.6;bottom:9px}.profession-mobile-hint{margin-bottom:1px}
+  .profession-scene-note{display:none}
+}
+@media print{.professions.section{display:none}}
