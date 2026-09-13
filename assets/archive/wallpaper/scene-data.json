@@ -1,0 +1,148 @@
+{
+  "source": "https://steamcommunity.com/sharedfiles/filedetails/?id=3715870843",
+  "author": "IMMORTAL",
+  "size": {
+    "height": 1434,
+    "width": 2570
+  },
+  "layers": [
+    {
+      "id": 17,
+      "name": "Firefly_Gemini Flash_coloque essa imagem em qualidade 4k e em proporção 16-9 caso não der certo refaça ela 292814",
+      "origin": "1285.00000 717.00000 0.00000",
+      "size": "2570.00000 1434.00000",
+      "parallaxDepth": "0.00000 0.00000",
+      "file": "background.webp"
+    },
+    {
+      "id": 236,
+      "name": "tiel",
+      "origin": "1080.76465 358.53183 0.00000",
+      "angles": "0.00000 -0.00000 2.77664",
+      "scale": "0.97198 0.97198 0.97198",
+      "size": "2570.00000 244.00000",
+      "file": "chain.webp"
+    },
+    {
+      "id": 231,
+      "name": "tiel",
+      "origin": "1518.78845 823.70636 0.00000",
+      "angles": "0.00000 -0.00000 -2.27300",
+      "scale": "0.88794 0.88794 0.88794",
+      "size": "2570.00000 244.00000",
+      "parallaxDepth": "-0.56000 -0.56000",
+      "file": "chain.webp"
+    },
+    {
+      "id": 409,
+      "name": "Magic Circle 01 (1)",
+      "parent": 591,
+      "angles": "0.00000 -0.00000 0.00000",
+      "size": "514.00000 540.00000",
+      "spin": -0.02,
+      "file": "circle-1.webp"
+    },
+    {
+      "id": 418,
+      "name": "Magic Circle 01 (2)",
+      "parent": 591,
+      "angles": "0.00000 -0.00000 0.00000",
+      "size": "540.00000 540.00000",
+      "spin": 0.039999999,
+      "file": "circle-2.webp"
+    },
+    {
+      "id": 427,
+      "name": "Magic Circle 01 (3)",
+      "parent": 591,
+      "angles": "0.00000 -0.00000 0.00000",
+      "size": "864.00000 838.00000",
+      "spin": 0.02,
+      "file": "circle-3.webp"
+    },
+    {
+      "id": 436,
+      "name": "Magic Circle 01 (4)",
+      "parent": 591,
+      "angles": "0.00000 -0.00000 0.00000",
+      "size": "1670.00000 1671.00000",
+      "spin": -0.0099999998,
+      "file": "circle-4.webp"
+    },
+    {
+      "id": 454,
+      "name": "Magic Circle 01 (6)",
+      "parent": 591,
+      "angles": "0.00000 -0.00000 0.00000",
+      "size": "923.00000 923.00000",
+      "spin": -0.039999999,
+      "file": "circle-6.webp"
+    },
+    {
+      "id": 445,
+      "name": "Magic Circle 01 (5)",
+      "parent": 591,
+      "angles": "0.00000 -0.00000 0.00000",
+      "size": "1134.00000 1134.00000",
+      "spin": 0.039999999,
+      "file": "circle-5.webp"
+    },
+    {
+      "id": 247,
+      "name": "tiel",
+      "origin": "1716.78113 941.32782 0.00000",
+      "angles": "0.00000 -0.00000 2.53282",
+      "scale": "0.90194 0.90194 0.90194",
+      "size": "2570.00000 244.00000",
+      "parallaxDepth": "0.60000 0.60000",
+      "file": "chain.webp"
+    },
+    {
+      "id": 27,
+      "name": "环",
+      "origin": "1250.97791 819.01910 0.00000",
+      "scale": "0.99991 0.75531 0.82238",
+      "size": "2570.00000 1434.00000",
+      "parallaxDepth": "0.49000 0.49000",
+      "file": "halo.webp"
+    },
+    {
+      "id": 468,
+      "name": "c3becbfca021422663bd31e139a7da05bc4db437907546-Hguqur",
+      "origin": "2286.84106 1065.48315 0.00000",
+      "scale": "0.16811 0.16811 0.16811",
+      "size": "3882.00000 3881.00000",
+      "parallaxDepth": "0.00000 0.00000",
+      "file": "ornament.webp"
+    },
+    {
+      "id": 22,
+      "name": "人物23",
+      "origin": "1245.89282 663.99512 0.00000",
+      "scale": "1.05388 1.05388 1.05388",
+      "size": "2570.00000 1434.00000",
+      "parallaxDepth": "0.53000 0.53000",
+      "file": "subject.webp"
+    },
+    {
+      "id": 213,
+      "name": "tiel",
+      "origin": "879.56073 695.42230 0.00000",
+      "angles": "-0.00000 -0.00000 -0.74534",
+      "scale": "0.97403 0.97403 0.97403",
+      "size": "2570.00000 244.00000",
+      "parallaxDepth": "1.15000 1.15000",
+      "file": "chain.webp"
+    },
+    {
+      "id": 384,
+      "name": "tiel",
+      "origin": "1692.53467 475.89362 0.00000",
+      "angles": "0.00000 -0.00000 0.51106",
+      "scale": "0.99179 0.99179 0.99179",
+      "size": "2570.00000 244.00000",
+      "parallaxDepth": "1.15000 1.15000",
+      "file": "chain.webp"
+    }
+  ]
+}
