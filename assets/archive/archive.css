@@ -142,8 +142,8 @@ h2 em{font-style:normal;color:#bca8a6}
 .certificate-wall{--frame-width:356px;--frame-gap:50px;margin-top:8px}
 .wall-row{position:relative;overflow:hidden;contain:layout paint}
 .wall-row::before{content:"";position:absolute;z-index:2;left:0;right:0;top:29px;height:2px;background:linear-gradient(0deg,#b7a78b26,#000);box-shadow:0 3px 5px #000}
-.wall-track{display:flex;width:max-content;animation:wall-left 115s linear infinite;will-change:transform}
-.wall-row:nth-child(2) .wall-track{animation-name:wall-right;animation-duration:130s}
+.wall-track{display:flex;width:max-content;animation:wall-left 57.5s linear infinite;will-change:transform}
+.wall-row:nth-child(2) .wall-track{animation-name:wall-right;animation-duration:65s}
 .wall-group{display:flex;gap:var(--frame-gap);padding:67px calc(var(--frame-gap)/2) 42px}
 @keyframes wall-left{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
 @keyframes wall-right{from{transform:translate3d(-50%,0,0)}to{transform:translate3d(0,0,0)}}

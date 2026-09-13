@@ -98,7 +98,8 @@
     $$('.cert-image').forEach(image => imageObserver.observe(image));
     const sceneObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        entry.target.dataset.offscreen = String(!entry.isIntersecting);
+        entry.target.dataset.offscreen = String(!entry.isIntersecting ||
+          (document.body.dataset.pageMode === 'desktop' && document.body.dataset.activePage !== entry.target.id));
       });
     }, {rootMargin:'60px'});
     sceneObserver.observe($('#home'));
