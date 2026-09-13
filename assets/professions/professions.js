@@ -58,9 +58,14 @@
     });
     return loading;
   }
-  async function choose(key, shouldLocate) {
+  async function choose(key, shouldLocate, pointerType) {
     const item = characters.get(key);
     item.selected = !item.selected;
+    if (!item.selected && pointerType === 'touch') {
+      item.focused = false;
+      item.hovered = false;
+      item.button.blur();
+    }
     paint(key);
     announce();
     if (shouldLocate) locate(key);
@@ -81,7 +86,7 @@
       });
       element.addEventListener('pointerleave', () => { item.hovered = false; paint(key); });
       element.addEventListener('pointercancel', () => { item.hovered = false; paint(key); });
-      element.addEventListener('click', () => choose(key, element === item.button));
+      element.addEventListener('click', event => choose(key, element === item.button, event.pointerType));
     });
     item.button.addEventListener('focus', () => {
       rovingIndex = item.index;
