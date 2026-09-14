@@ -254,25 +254,68 @@
     } catch { toast('暂时无法复制，请长按微信号手动复制'); }
   });
 
-  // Wallpaper Engine's original local soundtrack loads only on explicit play.
+  // Start the original local soundtrack on entry. Browsers may reject audible
+  // autoplay; in that case the first non-toggle gesture retries in the same
+  // trusted event. The visible switch always remains the final authority.
   const audio = $('#wallpaperAudio');
   audio.volume = .35;
   const sound = $('#soundToggle');
+  const unlockEvents = ['pointerdown', 'keydown', 'touchstart'];
+  let wantsSound = true;
+  let startingSound;
+  function removeSoundUnlock() {
+    unlockEvents.forEach(type => document.removeEventListener(type, unlockSound, true));
+  }
+  function installSoundUnlock() {
+    unlockEvents.forEach(type => document.addEventListener(type, unlockSound, {capture:true, passive:true}));
+  }
   function syncSound() {
     const playing = !audio.paused;
     sound.setAttribute('aria-pressed', String(playing));
     sound.innerHTML = '<span aria-hidden="true">♫</span> ' + (playing ? '关闭原壁纸音乐' : '开启原壁纸音乐');
   }
+  async function startSound(notifyFailure = false) {
+    if (!wantsSound || !audio.paused) return !audio.paused;
+    if (startingSound) return startingSound;
+    startingSound = audio.play().then(() => {
+      removeSoundUnlock();
+      syncSound();
+      return true;
+    }).catch(() => {
+      installSoundUnlock();
+      syncSound();
+      if (notifyFailure) toast('浏览器暂未允许播放，点击页面任意位置即可继续');
+      return false;
+    }).finally(() => { startingSound = null; });
+    return startingSound;
+  }
+  function unlockSound(event) {
+    if (!wantsSound || event.target.closest?.('#soundToggle')) return;
+    void startSound(false);
+  }
   sound.addEventListener('click', async () => {
-    if (!audio.paused) { audio.pause(); syncSound(); return; }
+    if (!audio.paused) {
+      wantsSound = false;
+      removeSoundUnlock();
+      audio.pause();
+      syncSound();
+      return;
+    }
+    wantsSound = true;
     sound.disabled = true;
     sound.textContent = '正在载入音乐…';
-    try { await audio.play(); } catch { toast('音乐暂时无法播放，请稍后重试'); }
-    finally { sound.disabled = false; syncSound(); }
+    await startSound(true);
+    sound.disabled = false;
+    syncSound();
   });
-  audio.addEventListener('pause', syncSound);
+  audio.addEventListener('pause', () => {
+    syncSound();
+    if (wantsSound) installSoundUnlock();
+  });
   audio.addEventListener('playing', syncSound);
   audio.addEventListener('error', () => { sound.disabled = false; syncSound(); toast('音乐载入失败，请稍后重试'); });
+  syncSound();
+  void startSound(false);
 
   let sceneFrame = 0, px = 0, py = 0;
   const hero = $('#home'), scene = $('.wallpaper-scene');

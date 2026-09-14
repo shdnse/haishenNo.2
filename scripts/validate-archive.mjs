@@ -51,7 +51,7 @@ for (const id of [...js.matchAll(/\$\('#([A-Za-z][\w-]*)'\)/g)].map(m => m[1])) 
 assert(css.includes('object-fit:contain'), 'Images use full-image containment');
 assert(css.includes('@keyframes wall-left') && css.includes('@keyframes wall-right'), 'Alternating wall directions');
 assert(css.includes('prefers-reduced-motion'), 'Reduced-motion handling');
-assert(html.includes('preload="none"'), 'Music is not loaded before visitor opt-in');
+assert(/<audio id="wallpaperAudio"[^>]*preload="auto" autoplay loop>/.test(html), 'Wallpaper music requests autoplay while keeping the existing control');
 assert(!html.includes('depthCarousel'), 'Old carousel runtime is not included');
 
 // Optional source comparison against the last published revision.

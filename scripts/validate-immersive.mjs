@@ -11,7 +11,8 @@ const articles = text => [...text.matchAll(/<article class="project">([\s\S]*?)<
 assert.deepEqual(articles(html), articles(baseline), 'Every project, description, tag and link is preserved');
 for (const id of ['home','education','contact']) {
   const getSection = text => text.match(new RegExp('<section[^>]+id="'+id+'"[\\s\\S]*?<\\/section>'))?.[0];
-  assert.equal(getSection(html), getSection(baseline), 'Untouched section: '+id);
+  const withoutAudioPolicy = section => section.replace(/<audio id="wallpaperAudio"[^>]*><\/audio>/, '<audio id="wallpaperAudio"></audio>');
+  assert.equal(withoutAudioPolicy(getSection(html)), withoutAudioPolicy(getSection(baseline)), 'Untouched section apart from requested audio policy: '+id);
 }
 assert(!/projectScene|sculpture|three\.module|\.glb/.test(html), 'No 3D figure, loader or model reference');
 assert(!existsSync(resolve(root,'assets/project-scene/project-scene.js')), '3D bootstrap removed');
